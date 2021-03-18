@@ -1,0 +1,23 @@
+name: CI
+on:
+  push:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - sbt: 1.4.9
+          - sbt: 1.5.0-M2
+          - sbt: 1.5.0-RC1
+    steps:
+    - uses: actions/checkout@v2.3.4
+    - uses: olafurpg/setup-scala@v10
+    - uses: coursier/cache-action@v6
+    - run: sbt
+           -v
+           -sbt-version
+           "${{ matrix.sbt }}"
+           run
